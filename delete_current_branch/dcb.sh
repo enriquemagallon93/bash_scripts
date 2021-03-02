@@ -9,17 +9,17 @@ fi
 
 
 # git status | grep "On branch " | sed "s/on branch //i" | read CURRENT_BRANCH
-read CURRENT_BRANCH < <(git status | grep "$BRANCH_INDICATOR" | sed "s/$BRANCH_INDICATOR//i")
+read CURRENT_BRANCH < <(git status 2> /dev/null | grep "$BRANCH_INDICATOR" | sed "s/$BRANCH_INDICATOR//i")
 
 if [ "$?" -ne "0" ]
 then
-  echo "current directory is not a directory or git is not installed"
+  echo "current directory is not a repository or git is not installed"
   exit 1
 fi
 
 if [ "$CURRENT_BRANCH" == "$CHECKOUT_BRANCH" ]
 then
-  echo "Checkout branch ($CHECKOUT_BRANCH) could not be the current branch (CURRENT_BRANCH)"
+  echo "Checkout branch ($CHECKOUT_BRANCH) could not be the current branch ($CURRENT_BRANCH)"
   echo "use 'dcb ANOTHER_BRANCH_TO_CHECKOUT' to delete current branch"
   exit 2
 fi
