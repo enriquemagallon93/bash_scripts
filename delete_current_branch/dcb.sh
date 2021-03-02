@@ -26,5 +26,3 @@ fi
 
 git checkout "$CHECKOUT_BRANCH"
 git branch -D "$CURRENT_BRANCH"
-
-echo "$CURRENT_BRANCH"
