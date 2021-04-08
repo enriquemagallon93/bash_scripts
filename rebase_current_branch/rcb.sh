@@ -39,7 +39,7 @@ fi
 git checkout "$CURRENT_BRANCH"
 if [ "$?" -ne "0" ]
 then
-  echo "Failed to checkout branch $CHECKOUT_BRANCH"
+  echo "Failed to checkout branch $CURRENT_BRANCH"
   exit 2
 fi
 git rebase -i "$CHECKOUT_BRANCH"
