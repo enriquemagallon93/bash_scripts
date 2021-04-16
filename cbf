@@ -1,0 +1,2 @@
+#!/bin/bash
+$(dirname "$0")/create_branch_from/cbf.sh "$@"
