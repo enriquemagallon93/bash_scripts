@@ -4,7 +4,7 @@ BRANCH_INDICATOR="On branch "
 
 if [ "$CHECKOUT_BRANCH" == "" ]
 then
-  CHECKOUT_BRANCH="master"
+  CHECKOUT_BRANCH="$(git branch -rl '*/HEAD' | rev | cut -d/ -f1 | rev)"
 fi
 
 

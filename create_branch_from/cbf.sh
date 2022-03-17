@@ -11,7 +11,7 @@ fi
 
 if [ "$BASE_BRANCH" == "" ]
 then
-  BASE_BRANCH="master"
+  BASE_BRANCH="$(git branch -rl '*/HEAD' | rev | cut -d/ -f1 | rev)"
 fi
 
 
