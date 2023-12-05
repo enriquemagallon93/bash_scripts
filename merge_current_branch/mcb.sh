@@ -1,13 +1,24 @@
 #!/bin/bash
 CHECKOUT_BRANCH="$1"
 BRANCH_INDICATOR="On branch "
+CMD_OPTIONS=""
+
+# Get all of the text that follows the first '--' in the command
+OPTIONS="no"
+for arg in "$@"; do
+  if ([ "$OPTIONS" == "yes" ]); then
+    CMD_OPTIONS="$CMD_OPTIONS $arg"
+  fi
+  if [ "$arg" == "--" ]; then
+    OPTIONS="yes"
+  fi
+done
 
 if [ "$CHECKOUT_BRANCH" == "" ]; then
   CHECKOUT_BRANCH="$(git branch -rl '*/HEAD' | rev | cut -d/ -f1 | rev)"
 fi
 
-# git status | grep "On branch " | sed "s/on branch //i" | read CURRENT_BRANCH
-read CURRENT_BRANCH < <(git status 2>/dev/null | grep "$BRANCH_INDICATOR" | sed "s/$BRANCH_INDICATOR//i")
+CURRENT_BRANCH="$(git branch --show-current)"
 
 if [ "$?" -ne "0" ]; then
   echo "current directory is not a repository or git is not installed"
@@ -27,7 +38,8 @@ if [ "$?" -ne "0" ]; then
 fi
 git pull origin "$CHECKOUT_BRANCH"
 if [ "$?" -ne "0" ]; then
-  echo "Failed to pull branch $CHECKOUT_BRANCH"
+  echo "Failed to pull branch $CHECKOUT_BRANCH. Returning to $CURRENT_BRANCH"
+  git checkout "$CURRENT_BRANCH"
   exit 3
 fi
 git checkout "$CURRENT_BRANCH"
@@ -35,4 +47,4 @@ if [ "$?" -ne "0" ]; then
   echo "Failed to checkout branch $CURRENT_BRANCH"
   exit 2
 fi
-git merge "$CHECKOUT_BRANCH"
+git merge $CHECKOUT_BRANCH$CMD_OPTIONS
