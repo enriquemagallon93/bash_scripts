@@ -14,6 +14,11 @@ then
   BASE_BRANCH="$(git branch -rl '*/HEAD' | rev | cut -d/ -f1 | rev)"
 fi
 
+if [ "$BASE_BRANCH" == "" ]
+then
+  echo "Could not automatically detect your default branch."
+  read -p "Enter default branch: " BASE_BRANCH
+fi
 
 # git status | grep "On branch " | sed "s/on branch //i" | read CURRENT_BRANCH
 read CURRENT_BRANCH < <(git status 2> /dev/null | grep "$BRANCH_INDICATOR" | sed "s/$BRANCH_INDICATOR//i")
